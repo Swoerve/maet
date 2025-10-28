@@ -8,9 +8,11 @@ on:
 jobs: 
   frontend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
       - uses: actions/checkout@v5
-      - run: cd frontend/
       - uses: actions/setup-node@v5
         with:
           node-version-file: ".vimrc"
