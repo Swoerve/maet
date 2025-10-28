@@ -15,6 +15,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
+          working-directory: ./frontend
           node-version-file: ".vimrc"
       - run: npm ci
       - run: npm lint
