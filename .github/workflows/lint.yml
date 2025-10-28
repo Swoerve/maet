@@ -1,0 +1,18 @@
+name: eslint
+run-name: eslint check
+on: 
+  pull_request:
+    branches:
+      - main
+jobs: 
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - run: cd frontend
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: ".vimrc"
+      - run: npm ci
+      - run: npm lint
+
