@@ -56,3 +56,5 @@ await db.one(`CREATE TABLE IF NOT EXISTS tasks(
     description TEXT NOT NULL
     )
 `)
+
+export default db
