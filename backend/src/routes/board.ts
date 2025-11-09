@@ -1,8 +1,8 @@
-import express from 'express'
-import { helloBoard } from '../controllers/board.js'
+import express from 'express';
+import { helloBoard } from '../controllers/board.js';
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', helloBoard)
+router.get('/', helloBoard);
 
-export default router
+export default router;
