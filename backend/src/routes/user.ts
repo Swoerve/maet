@@ -1,4 +1,5 @@
 import express from 'express';
+import { createNewUser } from '../controllers/user.js';
 
 const router = express.Router();
 
@@ -9,9 +10,7 @@ router.get('/', (req, res) => {
 
 // create user
 
-router.post('/new', (req, res) => {
-  res.send('new user');
-});
+router.post('/new', createNewUser);
 
 // edit user
 router.patch('/:id', (req, res) => {
@@ -19,13 +18,14 @@ router.patch('/:id', (req, res) => {
 });
 
 // check if password match?
-router.get('/check', (req, res) => {
+router.get('/verify', (req, res) => {
   // look for user with matchin mail and password?
+  // check if password = the req.body.password
   // respond with a true or false value?
   res.send('new user');
 });
 
-// get user
+// get user, just to return user id to the client
 router.get('/:id', (req, res) => {
   res.send(`getting user ${req.params.id}`);
 });
