@@ -1,4 +1,4 @@
-import {fetchHelloUser} from '../services/user.ts'
+import {fetchHelloUser} from '../services/user.js'
 import type {Request, Response} from 'express'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

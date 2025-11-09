@@ -1,8 +1,8 @@
 //import express = require('express')
 import express from 'express'
 import cors from 'cors'
-import userRoutes from './routes/user.ts'
-import boardRoutes from './routes/board.ts'
+import userRoutes from './routes/user.js'
+import boardRoutes from './routes/board.js'
 
 const app = express()
 

@@ -1,5 +1,5 @@
 import express from 'express'
-import { helloBoard } from '../controllers/board.ts'
+import { helloBoard } from '../controllers/board.js'
 
 const router = express.Router()
 
