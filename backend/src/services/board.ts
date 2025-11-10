@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import db from '../models/postgres.js'
 
-export function fetchHelloBoard(): string {
+export async function fetchHelloBoard() {
   return 'hello Board';
 }
 
-export function createBoard(owner_id: number, title: string){
+export async function createBoard(owner_id: number, title: string){
   db.one(`INSERT INTO boards(owner_id, title) VALUES($1, $2)`, [owner_id, title])
   .then((data) => {
     console.log(data)
@@ -16,7 +17,7 @@ export function createBoard(owner_id: number, title: string){
   return false
 }
 
-export function editBoardTitle(id: number, title: string){
+export async function editBoardTitle(id: number, title: string){
   db.one(`UPDATE boards SET title = $2 WHERE id = $1`, [id, title])
   .then((data) => {
     console.log(data)
@@ -28,8 +29,8 @@ export function editBoardTitle(id: number, title: string){
   return false
 }
 
-export function getBoardById(id: number): {result: boolean, body?: Record<string, unknown>, error?: unknown}{
-  db.one(`SELECT 1 FROM boards WHERE id = $1`, [id])
+export async function getBoardById(id: number): Promise<any>{
+  const response = await db.one(`SELECT * FROM boards WHERE id = $1`, [id])
   .then((data) => {
     console.log(data)
     return {
@@ -48,13 +49,11 @@ export function getBoardById(id: number): {result: boolean, body?: Record<string
       error: error
     }
   })
-  return {
-    result: false
-  }
+  return response
 }
 
-export function getBoardByUser(id: number): {result: boolean, data?: unknown[], error?: unknown} {
-  db.many(`SELECT * FROM boardusers WHERE boardusers.user_id = $1`, [id])
+export async function getBoardByUser(id: number): Promise<any> {
+  const response = await db.many(`SELECT * FROM boardusers WHERE boardusers.user_id = $1`, [id])
   .then((data) => {
     // eslint-disable-next-line prefer-const
     let result: {result: unknown, data: unknown[]} = {
@@ -62,9 +61,9 @@ export function getBoardByUser(id: number): {result: boolean, data?: unknown[], 
       data: []
     }
     data.forEach((d: Record<string, unknown>) => {
-      result.data.push(d.id)
+      console.log(d)
+      result.data.push(d.board_id)
     })
-    result.result = true
     console.log(data)
     return result
   })
@@ -75,13 +74,11 @@ export function getBoardByUser(id: number): {result: boolean, data?: unknown[], 
       error: error
     }
   })
-  return {
-    result: false
-  }
+  return response
 }
 
-export function createUserBoardConnection(user_id: number, board_id: number, is_owner: boolean){
-  db.one(`INSERT INTO boardusers(user_id, board_id, is_owner) VALUES($1, $2, $3)`, [user_id, board_id, is_owner])
+export async function createUserBoardConnection(user_id: number, board_id: number, is_owner: boolean){
+  await db.one(`INSERT INTO boardusers(user_id, board_id, is_owner) VALUES($1, $2, $3)`, [user_id, board_id, is_owner])
   .then((data) => {
     console.log(data)
     return true

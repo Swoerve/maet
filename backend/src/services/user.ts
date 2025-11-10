@@ -1,17 +1,18 @@
 
 import db from '../models/postgres.js'
 
-export function fetchHelloUser(): string {
+export async function fetchHelloUser() {
   return 'hello User';
 }
 
-export function postNewUser(username: string, email: string, password: string): void {
+export async function postNewUser(username: string, email: string, password: string) {
 
-  db.one(`INSERT INTO users(username, email, password) VALUES ($1, $2, $3)`, [username, email, password])
+  await db.one(`INSERT INTO users(username, email, password) VALUES ($1, $2, $3)`, [username, email, password])
   .then(data => {console.log(data)})
   .catch(error => console.error(error))
   // if everything went well return true for success
   //return true
 
   // if everything went horrible return false for failure
+  return
 }
