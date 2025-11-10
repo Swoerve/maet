@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-export default function FormPropsTextFields() {
+export default function LoginPage() {
   return (
     <Box
       component="form"
