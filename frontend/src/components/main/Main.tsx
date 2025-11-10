@@ -11,34 +11,47 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 function Main() {
 
+  // state holding board info for the user
   const [boards, setBoards] = useState<Record<string, unknown>[]>([]);
+
+  // new Board states
   const [newModalOpen, setNewModalOpen] = useState<boolean>(false);
   const handleOpen = () => setNewModalOpen(true);
   const handleClose = () => setNewModalOpen(false);
   const [newBoardTitle, setNewBoardTitle] = useState<string>("");
 
+  const navigate = useNavigate()
+
+  // check if the user is logged in
   const user = sessionStorage.getItem("user");
-  if(user === null){
-      console.log('user not Logged in')
-      // kick user back to login site
-  }
+  
 
   useEffect(() => {
+
+    if(user === null){
+      console.log('user not Logged in')
+      // kick user back to login page
+      navigate('/login')
+    }
+
     async function getUserBoards() {
       try {
+        // get the ids of all the boards teh user is part of
         const response = await axios.get(`/api/board/user/${user}`);
-        console.log(response);
         const data = await response.data;
-        console.log(data);
+
+        // with the ids then proceed to get the board information
         const newData: any = []
         await Promise.all(data.map(async (d: any)=>{
            const responseBoard = await axios.get(`/api/board/${d}`)
            const nData = await responseBoard.data
            newData.push(await nData)
         }))
+
         setBoards(newData)
         console.log('boards have been set')
       } catch (error) {
@@ -47,11 +60,14 @@ function Main() {
     }
 
     if (boards.length == 0) {
-      getUserBoards();
+      getUserBoards(); // call it if we dont have any boards loaded yet
     }
+
+    // cant have a blank thingimajig, maaan
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // creates a new board
   async function createNewBoard() {
     const response = await axios.post(`/api/board`, {
       owner_id: user,
