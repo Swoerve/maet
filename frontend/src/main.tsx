@@ -6,9 +6,11 @@ import GlobalStyles from '@mui/material/GlobalStyles'
 import './index.css'
 import App from './App.tsx'
 import Login from './login-page.tsx'
+import Main from './components/main/Main.tsx'
 
 const router = createBrowserRouter([
-  {path: '/login', element: <Login/>}
+  {path: '/login', element: <Login/>},
+  {path: '/', element: <Main/>}
 ])
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
