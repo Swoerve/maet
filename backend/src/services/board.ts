@@ -28,28 +28,56 @@ export function editBoardTitle(id: number, title: string){
   return false
 }
 
-export function getBoardById(id: number){
+export function getBoardById(id: number): {result: boolean, body?: Record<string, unknown>, error?: unknown}{
   db.one(`SELECT 1 FROM boards WHERE id = $1`, [id])
   .then((data) => {
     console.log(data)
-    return true
+    return {
+      result: true,
+      body: {
+        id: data.id,
+        owner_id: data.owner_id,
+        title: data.title
+      }
+    }
   })
   .catch((error) => {
     console.log(error)
+    return {
+      result: false,
+      error: error
+    }
   })
-  return false
+  return {
+    result: false
+  }
 }
 
-export function getBoardByUser(id: number){
+export function getBoardByUser(id: number): {result: boolean, data?: unknown[], error?: unknown} {
   db.many(`SELECT * FROM boardusers WHERE boardusers.user_id = $1`, [id])
   .then((data) => {
+    // eslint-disable-next-line prefer-const
+    let result: {result: unknown, data: unknown[]} = {
+      result: true,
+      data: []
+    }
+    data.forEach((d: Record<string, unknown>) => {
+      result.data.push(d.id)
+    })
+    result.result = true
     console.log(data)
-    return true
+    return result
   })
   .catch((error) => {
     console.log(error)
+    return {
+      result: false,
+      error: error
+    }
   })
-  return false
+  return {
+    result: false
+  }
 }
 
 export function createUserBoardConnection(user_id: number, board_id: number, is_owner: boolean){
