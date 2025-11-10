@@ -4,4 +4,4 @@ WORKDIR /backend
 RUN npm install
 RUN npm build
 EXPOSE 3000
-ENTRYPOINT ["node", "./dist/server.js"]
+ENTRYPOINT ["npm", "run", "start"]
