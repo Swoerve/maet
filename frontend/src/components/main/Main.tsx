@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import "./Main.css";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
@@ -29,11 +29,18 @@ function Main() {
   useEffect(() => {
     async function getUserBoards() {
       try {
-        const response = await axios.get(`/api/boards/user/${user}`);
+        const response = await axios.get(`/api/board/user/${user}`);
         console.log(response);
         const data = await response.data;
         console.log(data);
-        setBoards(data);
+        const newData: any = []
+        await Promise.all(data.map(async (d: any)=>{
+           const responseBoard = await axios.get(`/api/board/${d}`)
+           const nData = await responseBoard.data
+           newData.push(await nData)
+        }))
+        setBoards(newData)
+        console.log('boards have been set')
       } catch (error) {
         console.log(error);
       }
@@ -45,27 +52,8 @@ function Main() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const boardItems = boards.map((board, index) => (
-    <>
-      <Grid key={index}>
-        <Card>
-          <CardActionArea>
-            <CardContent>
-              <Typography variant="h5" component="div">
-                {String(board.title)}
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-          <CardActions>
-            <Button>Go</Button>
-          </CardActions>
-        </Card>
-      </Grid>
-    </>
-  ));
-
   async function createNewBoard() {
-    const response = await axios.post(`/api/boards`, {
+    const response = await axios.post(`/api/board`, {
       owner_id: user,
       title: newBoardTitle
     });
@@ -74,13 +62,30 @@ function Main() {
 
   return (
     <>
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-      >
-        {boardItems}
-      </Grid>
+      { boards.length > 0 ?
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 4, sm: 8, md: 12 }}
+        >
+          {boards.map((board, index) => (
+            <>
+              <Grid key={index}>
+                <Card>
+                  <CardActionArea>
+                    <CardContent>
+                      <Typography variant="h5" component="div">
+                        {String(board.title)}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+            </>
+          ))}
+        </Grid>
+      : null}
+      
       <Button onClick={handleOpen}>New Board</Button>
       <Modal
         open={newModalOpen}
