@@ -15,3 +15,44 @@ export async function createNewUser(req: Request, res: Response) {
 
   res.send("trying to create new user")
 }
+
+export async function editUser(req: Request, res: Response) {
+  const username = req.body.username
+  const email = req.body.email
+  const password = req.body.password
+
+  await postNewUser(username, email, password)
+
+  res.send("trying to create new user")
+}
+
+
+export async function getVerify(req: Request, res: Response) {
+  const username = req.body.username
+  const email = req.body.email
+  const password = req.body.password
+
+  await postNewUser(username, email, password)
+
+  res.send("trying to create new user")
+}
+
+export async function getUser(req: Request, res: Response) {
+  const username = req.body.username
+  const email = req.body.email
+  const password = req.body.password
+
+  await postNewUser(username, email, password)
+
+  res.send("trying to create new user")
+}
+
+export async function deleteUser(req: Request, res: Response) {
+  const username = req.body.username
+  const email = req.body.email
+  const password = req.body.password
+
+  await postNewUser(username, email, password)
+
+  res.send("trying to create new user")
+}
