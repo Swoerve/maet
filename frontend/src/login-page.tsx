@@ -16,21 +16,11 @@ export default function FormPropsTextFields() {
         <Grid container spacing={2}>
           <Stack spacing={2}>
             <h1 className="text-3xl font-bold text-black">Title</h1>
-            <h2 className="text-2xl font-semibold text-black">login</h2>
             <Grid size={3}>
               <TextField
                 required
                 id="outlined-required"
-                label="Required"
-                defaultValue="Name"
-              />
-            </Grid>
-            <Grid size={3}>
-              <TextField
-                required
-                id="outlined-required"
-                label="Required"
-                defaultValue="email"
+                label="email"
                 />
             </Grid>
             <Grid size={3}>
