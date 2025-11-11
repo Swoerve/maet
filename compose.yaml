@@ -1,8 +1,4 @@
 services:
-  frontend:
-    build: frontend
-    ports:
-      - "80:80"
   backend:
     build: backend
     depends_on:
@@ -12,6 +8,9 @@ services:
       - PG_URI=postgres://postgres:secret@database/postgres
     ports:
       - "3000:3000"
+    healthcheck:
+      interval: 5s
+      test: 'curl http://localhost:3000'
   database:
     image: postgres
     environment:
@@ -21,3 +20,11 @@ services:
       test: 'pg_isready --username=postgres'
     volumes:
       - ./data:/var/lib/postgresql
+  frontend:
+    build: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+
