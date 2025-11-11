@@ -2,19 +2,19 @@
 import db from '../models/postgres.js'
 
 export async function createColume(board_id:number, title:string) {
-  db.one(`INSERT INTO columns(board_id, title) VALUES($1, $2)`, [board_id, title])
+  return await db.one(`INSERT INTO columns(board_id, title) VALUES($1, $2)`, [board_id, title])
   .then((data) =>{
     console.log(data)
     return true
   })
   .catch((error) =>{
     console.log(error)
+    return false
   })
-  return false
 }
 
 export async function editColumeTitle(id:number, title:string) {
-  db.one(`UPDATE columns SET title = $2 WHERE id $1`, [id, title]) 
+  return await db.one(`UPDATE columns SET title = $2 WHERE id $1`, [id, title]) 
   .then((data) => {
     console.log(data)
     return true
@@ -22,11 +22,10 @@ export async function editColumeTitle(id:number, title:string) {
   .catch((error) => {
     console.log(error)
   })
-  return false
 }
 
 export async function getColumeById(id:number): Promise<any>{
-  const response = await db.one(`SELECT * FROM colume WHERE id = $1`, [id])
+  const response = await db.one(`SELECT * FROM columns WHERE id = $1`, [id])
   .then((data) => {
     console.log(data)
     return{
@@ -57,7 +56,7 @@ export async function getColumeByBoard(id: number): Promise<any> {
     }
     data.forEach((d: Record<string, unknown>) => {
       console.log(d)
-      result.data.push(d.colume_id)
+      result.data.push(d.id)
     })
     console.log(data)
     return result
