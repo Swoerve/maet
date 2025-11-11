@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
+import { Typography } from '@mui/material';
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -21,14 +22,9 @@ export default function LoginPage() {
   // checking if the email and password match and are part of the same account
   // then sending us out to /main
   function loginUser() {
-    axios.get(`/api/user/verify`, {
-      headers: {
-        "Content-Type": "application/json"
-      },
-      data: {
+    axios.post(`/api/user/verify`, {
       email: email,
       password: password
-    }
     }).then((res) => res.data).then((data) => {
       if(data){
         sessionStorage.setItem('user', data.id)
@@ -42,15 +38,11 @@ export default function LoginPage() {
   // then sends us out to /main
   function signupUser() {
         axios.post(`/api/user`, {
-      headers: {
-        "Content-Type": "application/json"
-      },
-      data: {
         username: username,
         email: email,
         password: password
     }
-    }).then((res) => res.data).then((data) => {
+    ).then((res) => res.data).then((data) => {
       if(data){
         sessionStorage.setItem('user', data.id)
         navigate('/main')
@@ -60,36 +52,45 @@ export default function LoginPage() {
 
   return (
     <Box
-      component="form"
-      sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
-      noValidate
-      autoComplete="off"
-    >
+    display="flex"
+    justifyContent="center"
+    alignItems="center"
+    minHeight="90vh">
       {!isSignup ? 
       <div>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} maxWidth="sm">
           <Stack spacing={2}>
-            <h1 className="text-3xl font-bold text-black">Login</h1>
-            <Grid size={3}>
-              <TextField
-                required
-                id="outlined-required"
-                label="email"
-                onChange={(event) => setEmail(event.target.value)}
-                />
-            </Grid>
-            <Grid size={3}>
-              <TextField
-                required
-                id="outlined-required"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                onChange={(event) => setPassword(event.target.value)}
-                />
-            </Grid>
-            <Button variant="outlined" onClick={loginUser}>login</Button>
-            <Button variant="outlined" onClick={() => setIsSignup(true)}>signup?</Button>
+            <Typography variant='h2' gutterBottom>Login</Typography>
+            <Box
+              component="form"
+              sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
+              noValidate
+              autoComplete="off"
+            >
+              <Grid size={3}>
+                <TextField
+                  required
+                  id="outlined-required"
+                  label="email"
+                  onChange={(event) => setEmail(event.target.value)}
+                  />
+              </Grid>
+              <Grid size={3}>
+                <TextField
+                  required
+                  id="outlined-required"
+                  label="Password"
+                  type="password"
+                  autoComplete="current-password"
+                  onChange={(event) => setPassword(event.target.value)}
+                  />
+              </Grid>
+            </Box>
+            <Stack direction="row" spacing={2} sx={{justifyContent: "space-evenly", alignItems: "center"}}>
+              <Button size='large' variant="outlined" onClick={loginUser}>login</Button>
+              <Button size='large' variant="outlined" onClick={() => setIsSignup(true)}>sign up?</Button>
+            </Stack>
+            
           </Stack>
         </Grid>
       </div> 
@@ -97,7 +98,13 @@ export default function LoginPage() {
       <div>
         <Grid container spacing={2}>
           <Stack spacing={2}>
-            <h1 className="text-3xl font-bold text-black">Signup</h1>
+            <Typography variant='h2' gutterBottom>Sign up</Typography>
+            <Box
+              component="form"
+              sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
+              noValidate
+              autoComplete="off"
+            >
             <Grid size={3}>
               <TextField
                 required
@@ -124,12 +131,15 @@ export default function LoginPage() {
                 onChange={(event) => setPassword(event.target.value)}
                 />
             </Grid>
-            <Button variant="outlined" onClick={signupUser}>signup</Button>
-            <Button variant="outlined" onClick={() => setIsSignup(false)}>back</Button>
+            </Box>
+            <Stack direction="row" spacing={2} sx={{justifyContent: "space-evenly", alignItems: "center"}}>
+            <Button size='large' variant="outlined" onClick={signupUser}>sign up</Button>
+            <Button size='large' variant="outlined" onClick={() => setIsSignup(false)}>back</Button>
+            </Stack>
           </Stack>
         </Grid>
       </div>
       }
-    </Box>
+  </Box>
   );
 }

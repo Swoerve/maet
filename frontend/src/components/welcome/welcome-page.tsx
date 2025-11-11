@@ -1,16 +1,19 @@
+import { Box, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
-import Link from '@mui/material/Link'
 import Stack from '@mui/material/Stack';
+import { NavLink } from 'react-router';
 
 export default function WelcomePage(){
   return(
-    <div>
+    <Box 
+    display="flex"
+    justifyContent="center"
+    alignItems="center"
+    minHeight="90vh">
       <Stack>
-        <h1 className="text-3xl font-bold text-black">Title</h1>
-          <Link href="/login">
-            <Button variant="outlined">login</Button> 
-          </Link>
+        <Typography variant='h1' gutterBottom>Maet</Typography>
+        <Button variant='outlined' component={NavLink} to='/login'>login</Button>
       </Stack>
-    </div>
+    </Box>
   )
 }
