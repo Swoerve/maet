@@ -105,7 +105,7 @@ function Main() {
             <>
               <Grid key={index}>
                 <Card>
-                  <CardActionArea>
+                  <CardActionArea onClick={() => {navigate(`board/${board.id}`)}}>
                     <CardContent>
                       <Typography variant="h5" component="div">
                         {String(board.title)}

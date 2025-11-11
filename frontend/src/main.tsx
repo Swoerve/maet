@@ -3,12 +3,13 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider, createBrowserRouter} from 'react-router'
 import { ThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles'
 import GlobalStyles from '@mui/material/GlobalStyles'
+import { CssBaseline } from '@mui/material'
 import './index.css'
 import Welcome from './components/welcome/welcome-page.tsx'
 import Login from './components/login/login-page.tsx'
 import Main from './components/main/Main.tsx'
-import Appbar from './components/app-bar/AppBar.tsx'
-import { CssBaseline } from '@mui/material'
+import Board from './components/board/board.tsx'
+import Root from './components/Root/Root.tsx'
 
 const theme = createTheme({
   colorSchemes: {
@@ -17,9 +18,12 @@ const theme = createTheme({
 });
 
 const router = createBrowserRouter([
-  {path: '/', element: <Welcome/>},
-  {path: '/login', element: <Login/>},
-  {path: '/main', element: <Main/>}
+  {index: true, element: <Welcome/>},
+  {path: 'login', element: <Login/>},
+  {path: 'main', Component: Root, children: [
+    {index: true, Component: Main},
+    {path: 'board/:board_id', Component: Board}
+  ]},
 ])
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -27,7 +31,6 @@ createRoot(document.getElementById('root')!).render(
       <GlobalStyles styles="@layer theme, base, mui, components, utilities;" />
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Appbar />
           <RouterProvider router={router}/>
         </ThemeProvider>
     </StyledEngineProvider>
