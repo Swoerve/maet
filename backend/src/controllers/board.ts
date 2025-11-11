@@ -10,7 +10,7 @@ export async function postBoard(req: Request, res: Response){
   const title: string = req.body.title
   const response = await createBoard(owner_id, title)
   if(response){
-    res.status(200).send()
+    res.status(200).json(response)
   } else {
     res.status(500).send('uuhhh')
   }

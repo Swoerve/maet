@@ -54,7 +54,8 @@ export async function getUser(req: Request, res: Response) {
   const id = Number(req.params.id)
 
   const serviceResult = await getUserById(id)
-
+  console.log('-----')
+  console.log(serviceResult)
   if(serviceResult.result){
     res.status(200).json(serviceResult.data)
   } else {

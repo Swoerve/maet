@@ -1,6 +1,5 @@
 import express from 'express';
-import { createNewUser, deleteUser, getVerify, patchUser } from '../controllers/user.js';
-import { getUserById } from '../services/user.js';
+import { createNewUser, deleteUser, getUser, getVerify, patchUser } from '../controllers/user.js';
 
 const router = express.Router();
 
@@ -19,7 +18,7 @@ router.patch('/:id', patchUser);
 router.post('/verify', getVerify);
 
 // get user, just to return user id to the client
-router.get('/:id', getUserById);
+router.get('/:id', getUser);
 
 // delete user
 router.delete('/:id', deleteUser);

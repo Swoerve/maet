@@ -49,7 +49,7 @@ export async function verifyUser(email: string, password: string): Promise<any> 
 
 export async function getUserById(id: number): Promise<any>  {
 
-  const response = await db.one(`SELECT FROM users WHERE id = $1`, [id])
+  const response = await db.one(`SELECT * FROM users WHERE id = $1`, [id])
   .then(data => {
     return {result: true, data: {id: data.id, username: data.username, email: data.email}}
   })
@@ -62,7 +62,7 @@ export async function getUserById(id: number): Promise<any>  {
 
 export async function dropUser(id: number): Promise<any>  {
 
-  const response = await db.none(`DROP users WHERE id = $1`, [id])
+  const response = await db.none(`DELETE FROM users WHERE id = $1`, [id])
   .then(() => {
     return {result: true}
   })

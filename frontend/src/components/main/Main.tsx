@@ -12,6 +12,19 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { Stack } from "@mui/material";
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 function Main() {
 
@@ -74,6 +87,10 @@ function Main() {
       title: newBoardTitle
     });
     console.log(response);
+    if(response.status == 200){
+      const data = await response.data
+      setBoards([...boards, {id: data.id, owner_id: data.owner_id, title: data.title}])
+    }
   }
 
   return (
@@ -109,20 +126,22 @@ function Main() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Create new Board
-          </Typography>
-          <TextField
-            id="new-board-title"
-            label="Title"
-            variant="outlined"
-            value={newBoardTitle}
-            onChange={(event) => {
-              setNewBoardTitle(event.target.value);
-            }}
-          />
-          <Button onClick={createNewBoard}>Create</Button>
+        <Box sx={modalStyle}>
+          <Stack spacing={2}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Create new Board
+            </Typography>
+            <TextField
+              id="new-board-title"
+              label="Title"
+              variant="outlined"
+              value={newBoardTitle}
+              onChange={(event) => {
+                setNewBoardTitle(event.target.value);
+              }}
+              />
+            <Button variant="outlined" onClick={createNewBoard}>Create</Button>
+          </Stack>
         </Box>
       </Modal>
     </>
