@@ -8,8 +8,12 @@ export async function helloBoard(req: Request, res: Response) {
 export async function postBoard(req: Request, res: Response){
   const owner_id: number = req.body.owner_id
   const title: string = req.body.title
-  await createBoard(owner_id, title)
-  res.status(200).send();
+  const response = await createBoard(owner_id, title)
+  if(response){
+    res.status(200).json(response)
+  } else {
+    res.status(500).send('uuhhh')
+  }
 }
 
 export async function patchBoard(req: Request, res: Response){
