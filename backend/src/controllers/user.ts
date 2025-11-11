@@ -1,4 +1,4 @@
-import { fetchHelloUser, postNewUser } from '../services/user.js';
+import { dropUser, editExistingUser, fetchHelloUser, getUserById, postNewUser, verifyUser } from '../services/user.js';
 import type { Request, Response } from 'express';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -11,48 +11,65 @@ export async function createNewUser(req: Request, res: Response) {
   const email = req.body.email
   const password = req.body.password
 
-  await postNewUser(username, email, password)
+  const serviceResult = await postNewUser(username, email, password)
 
-  res.send("trying to create new user")
+  if(serviceResult.result){
+    res.status(200).json(serviceResult.data)
+  } else {
+    res.status(500).send(serviceResult.error.message)
+  }
 }
 
-export async function editUser(req: Request, res: Response) {
+export async function patchUser(req: Request, res: Response) {
+  console.log(req.body)
   const username = req.body.username
   const email = req.body.email
   const password = req.body.password
+  const id = Number(req.params.id)
 
-  await postNewUser(username, email, password)
+  const serviceResult = await editExistingUser(id, username, email, password)
 
-  res.send("trying to create new user")
+  if(serviceResult.result){
+    res.status(200).json(serviceResult.data)
+  } else {
+    res.status(500).send(serviceResult.error.message)
+  }
 }
 
 
 export async function getVerify(req: Request, res: Response) {
-  const username = req.body.username
   const email = req.body.email
   const password = req.body.password
 
-  await postNewUser(username, email, password)
+  const serviceResult = await verifyUser(email, password)
 
-  res.send("trying to create new user")
+  if(serviceResult.result){
+    res.status(200).json(serviceResult.data)
+  } else {
+    res.status(500).send(serviceResult.error.message)
+  }
 }
 
 export async function getUser(req: Request, res: Response) {
-  const username = req.body.username
-  const email = req.body.email
-  const password = req.body.password
+  const id = Number(req.params.id)
 
-  await postNewUser(username, email, password)
+  const serviceResult = await getUserById(id)
 
-  res.send("trying to create new user")
+  if(serviceResult.result){
+    res.status(200).json(serviceResult.data)
+  } else {
+    res.status(500).send(serviceResult.error.message)
+  }
 }
 
 export async function deleteUser(req: Request, res: Response) {
-  const username = req.body.username
-  const email = req.body.email
-  const password = req.body.password
+  const id = Number(req.params.id)
 
-  await postNewUser(username, email, password)
+  const serviceResult = await dropUser(id)
 
-  res.send("trying to create new user")
+  if(serviceResult.result){
+    res.status(200).send('user deleted')
+  } else {
+    res.status(500).send(serviceResult.error.message)
+  }
 }
