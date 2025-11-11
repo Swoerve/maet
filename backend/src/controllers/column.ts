@@ -1,4 +1,4 @@
-import {createColume, editColumeTitle ,getColumeById, getColumeByBoard, deleteBoardColume} from '../services/colume.js'
+import {createColume, editColumeTitle ,getColumeById, getColumeByBoard, deleteBoardColume} from '../services/column.js'
 import type { Request, Response } from 'express';
 
 export async function postColume(req: Request, res: Response){

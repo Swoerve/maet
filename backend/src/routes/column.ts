@@ -1,4 +1,4 @@
-import { getColume, getBoardeColume, postColume, patchColume, deleteColume } from "../controllers/colume.js";
+import { getColume, getBoardeColume, postColume, patchColume, deleteColume } from "../controllers/column.js";
 import express from 'express';
 
 const router = express.Router();
