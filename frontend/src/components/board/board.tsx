@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 //import "./Main.css";
 import {Button, Typography, Modal, Box, TextField, IconButton} from "@mui/material";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { Stack } from "@mui/material";
-import { PlusOneRounded, Add } from "@mui/icons-material"
+import Column from "../column/Column";
+import { Add } from "@mui/icons-material";
 
 const modalStyle = {
   position: 'absolute',
@@ -21,9 +22,9 @@ const modalStyle = {
 
 function Board() {
   const params = useParams()
-  console.log(params)
+  // console.log(params)
   // state holding board info for the user
-  const [board, setBoard] = useState<Record<string, unknown>[]>([]);
+  const [board, setBoard] = useState<Record<string, unknown>>({});
 
   const [columns, setColumns ] = useState<Record<string, unknown>[]>([])
 
@@ -33,21 +34,7 @@ function Board() {
   const closeColumnModal = () => setModalColumnOpen(false);
   const [newColumnTitle, setNewColumnTitle] = useState<string>("");
 
-  const navigate = useNavigate()
-
-  // check if the user is logged in
-  const user = sessionStorage.getItem("user");
-  
-
   useEffect(() => {
-
-    // check instead if user is logged in AND has acces to this board
-
-    // if(user === null){
-    //   console.log('user not Logged in')
-    //   // kick user back to login page
-    //   navigate('/login')
-    // }
 
     async function getCurrBoardInfo() {
       try {
@@ -83,16 +70,16 @@ function Board() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // creates a new board
-  async function createNewBoard() {
-    const response = await axios.post(`/api/board`, {
-      owner_id: user,
-      title: newBoardTitle
+  // calls the backend with a new column to save/create it
+  async function createNewColumn() {
+    const response = await axios.post(`/api/column`, {
+      board_id: board.id,
+      title: newColumnTitle
     });
     console.log(response);
     if(response.status == 200){
       const data = await response.data
-      setBoards([...boards, {id: data.id, owner_id: data.owner_id, title: data.title}])
+      setColumns([...columns, {id: data.id, board_id: data.board_id, title: data.title}])
     }
   }
 
@@ -100,7 +87,7 @@ function Board() {
     <>
       <Stack direction={'row'} spacing={4}>
         {columns.map((column) => <>
-          <Column column={column}></Column>
+          <Column column={column as {id: number, board_id: number, title: string}}></Column>
         </>)}
         <IconButton onClick={openColumnModal}><Add></Add></IconButton>
       </Stack>
@@ -124,7 +111,7 @@ function Board() {
                 setNewColumnTitle(event.target.value);
               }}
               />
-            <Button variant="outlined" onClick={createNewBoard}>Create</Button>
+            <Button variant="outlined" onClick={createNewColumn}>Create</Button>
           </Stack>
         </Box>
       </Modal>

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { AppBar, IconButton, Menu, MenuItem, Modal, Toolbar, Typography } from "@mui/material";
-import { AccountCircle } from '@mui/icons-material'
+import { AccountCircle, Home } from '@mui/icons-material'
 import Profile from "../profile/Profile";
 import { useNavigate, useParams } from "react-router";
 import axios from "axios";
@@ -68,6 +68,7 @@ function Appbar() {
     <>
       <AppBar position="static" sx={{flexGrow: 1}}>
         <Toolbar>
+          <IconButton onClick={() => {navigate('/main')}}><Home></Home></IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {board ? board.title : 'Boards'}
           </Typography>
