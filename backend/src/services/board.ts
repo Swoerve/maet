@@ -18,7 +18,7 @@ export async function createBoard(owner_id: number, title: string){
 }
 
 export async function editBoardTitle(id: number, title: string){
-  db.one(`UPDATE boards SET title = $2 WHERE id = $1`, [id, title])
+  return await db.one(`UPDATE boards SET title = $2 WHERE id = $1`, [id, title])
   .then((data) => {
     console.log(data)
     return true
@@ -26,7 +26,6 @@ export async function editBoardTitle(id: number, title: string){
   .catch((error) => {
     console.log(error)
   })
-  return false
 }
 
 export async function getBoardById(id: number): Promise<any>{
@@ -78,7 +77,7 @@ export async function getBoardByUser(id: number): Promise<any> {
 }
 
 export async function createUserBoardConnection(user_id: number, board_id: number, is_owner: boolean){
-  await db.one(`INSERT INTO boardusers(user_id, board_id, is_owner) VALUES($1, $2, $3)`, [user_id, board_id, is_owner])
+  return await db.one(`INSERT INTO boardusers(user_id, board_id, is_owner) VALUES($1, $2, $3)`, [user_id, board_id, is_owner])
   .then((data) => {
     console.log(data)
     return true
@@ -86,5 +85,4 @@ export async function createUserBoardConnection(user_id: number, board_id: numbe
   .catch((error) => {
     console.log(error)
   })
-  return false
 }
