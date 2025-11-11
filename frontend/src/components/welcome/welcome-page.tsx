@@ -4,6 +4,12 @@ import Stack from '@mui/material/Stack';
 import { NavLink } from 'react-router';
 
 export default function WelcomePage(){
+  const user = sessionStorage.getItem('user')
+
+  if (user != null) {
+    sessionStorage.removeItem("user")
+  }
+
   return(
     <Box 
     display="flex"
