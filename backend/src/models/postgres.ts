@@ -23,7 +23,7 @@ await db.any(`DROP TABLE IF EXISTS users`); // remove on prod
 
 await db.any(`CREATE TABLE IF NOT EXISTS users(
     id SERIAL PRIMARY KEY,
-    username VARCHAR NOT NULL,
+    username VARCHAR NOT NULL UNIQUE,
     email VARCHAR NOT NULL UNIQUE,
     password VARCHAR NOT NULL
     )
