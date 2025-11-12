@@ -27,13 +27,14 @@ export async function createBoard(owner_id: number, title: string){
 }
 
 export async function editBoardTitle(id: number, title: string){
-  return await db.one(`UPDATE boards SET title = $2 WHERE id = $1`, [id, title])
+  return await db.none(`UPDATE boards SET title = $2 WHERE id = $1`, [id, title])
   .then((data) => {
     console.log(data)
     return true
   })
   .catch((error) => {
     console.log(error)
+    return false
   })
 }
 
@@ -61,7 +62,7 @@ export async function getBoardById(id: number): Promise<any>{
 }
 
 export async function getBoardByUser(id: number): Promise<any> {
-  const response = await db.many(`SELECT * FROM boardusers WHERE boardusers.user_id = $1`, [id])
+  const response = await db.any(`SELECT * FROM boardusers WHERE boardusers.user_id = $1`, [id])
   .then((data) => {
     // eslint-disable-next-line prefer-const
     let result: {result: unknown, data: unknown[]} = {
@@ -93,6 +94,18 @@ export async function createUserBoardConnection(user_id: number, board_id: numbe
   })
   .catch((error) => {
     console.log(error)
+  })
+}
+
+export async function removeUserBoardConnection(user_id: number, board_id: number){
+  return await db.one(`DELETE FROM boardusers WHERE user_id = $1 AND board_id = $2`, [user_id, board_id])
+  .then((data) => {
+    console.log(data)
+    return true
+  })
+  .catch((error) => {
+    console.log(error)
+    return false
   })
 }
 

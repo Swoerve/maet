@@ -50,7 +50,7 @@ export async function getTaskById(id:number): Promise<any>{
 }
 
 export async function getTaskByColumn(id:number): Promise<any>{
-  const response = await db.many(`SELECT * FROM tasks WHERE column_id = $1`,[id])
+  const response = await db.any(`SELECT * FROM tasks WHERE column_id = $1`,[id])
   .then((data) => {
     const result: {result: unknown, data: unknown[]} = {
       result: true,

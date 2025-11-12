@@ -48,7 +48,7 @@ export async function getColumeById(id:number): Promise<any>{
 }
 
 export async function getColumeByBoard(id: number): Promise<any> {
-  const response = await db.many(`SELECT * FROM columns WHERE board_id = $1`, [id])
+  const response = await db.any(`SELECT * FROM columns WHERE board_id = $1`, [id])
   .then((data) => {
     const result: {result: unknown, data: unknown[]} = {
       result: true,

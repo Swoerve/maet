@@ -44,7 +44,7 @@ export default function LoginPage() {
   // then sending us out to /main
   function loginUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    console.log("signing up")
+    console.log("logging in")
     if(emailError && passwordError){
       console.log("not valid")
       return

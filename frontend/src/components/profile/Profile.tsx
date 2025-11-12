@@ -45,6 +45,7 @@ export default function LoginPage() {
       getUser();
       loadedUserInfo = true;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function editUser() {
