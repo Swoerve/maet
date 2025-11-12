@@ -44,9 +44,13 @@ function Board() {
         setBoard(data)
         console.log('board has been set')
         console.log(board)
+        const boardColumnsResponse = await axios.get(`/api/column/board/${params.board_id}`);
+        const boardColumnsData = await boardColumnsResponse.data;
+        console.log('board has been set')
+        console.log(board)
         // with the ids then proceed to get the board information
         const newColumns: any = []
-        await Promise.all(data.map(async (d: any)=>{
+        await Promise.all(boardColumnsData.map(async (d: any)=>{
            const responseBoard = await axios.get(`/api/column/${d}`)
            const nData = await responseBoard.data
            newColumns.push(await nData)
@@ -73,13 +77,14 @@ function Board() {
   // calls the backend with a new column to save/create it
   async function createNewColumn() {
     const response = await axios.post(`/api/column`, {
-      board_id: board.id,
+      board_id: Number(board.id),
       title: newColumnTitle
     });
     console.log(response);
     if(response.status == 200){
       const data = await response.data
       setColumns([...columns, {id: data.id, board_id: data.board_id, title: data.title}])
+      console.log(columns)
     }
   }
 
@@ -89,7 +94,9 @@ function Board() {
         {columns.map((column) => <>
           <Column column={column as {id: number, board_id: number, title: string}}></Column>
         </>)}
-        <IconButton onClick={openColumnModal}><Add></Add></IconButton>
+        <Stack>
+          <IconButton onClick={openColumnModal}><Add></Add></IconButton>
+        </Stack>
       </Stack>
       <Modal
         open={modalColumnOpen}

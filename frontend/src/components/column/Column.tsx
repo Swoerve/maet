@@ -74,10 +74,10 @@ function Column({column }: {column: {id: number, board_id: number, title: string
 
   return (
     <>
-      <Stack spacing={2}>
+      <Stack spacing={1} minWidth={"20ch"}>
         <p>Hello</p>
-        <p>World</p>
-        <IconButton onClick={openTaskModal}><Add></Add></IconButton>
+        <p>{column.title}</p>
+        <IconButton onClick={openTaskModal} size="large"><Add></Add></IconButton>
         {tasks.map((task) => <>
           <Task task={task as {id: number, column_id: number, title: string, description: string}} taskUtils={taskUtils}></Task>
         </>)}
