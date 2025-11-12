@@ -5,9 +5,9 @@ import {Button, Typography, Modal, Box, TextField, IconButton} from "@mui/materi
 import axios from "axios";
 import { useParams } from "react-router";
 import { Stack } from "@mui/material";
-import Column from "../column/Column";
+import { lazy } from "react";
+const Column = lazy(() => import('../column/Column'))
 import { Add } from "@mui/icons-material";
-
 const modalStyle = {
   position: 'absolute',
   top: '50%',

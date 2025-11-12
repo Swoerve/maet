@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Box, Button, IconButton, Modal, Stack, TextField, Typography } from "@mui/material";
-import Task from "../task/Task";
+import { lazy } from "react";
+const Task = lazy(() => import('../task/Task'))
 import axios from "axios";
 import { Add } from "@mui/icons-material";
 
