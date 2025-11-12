@@ -5,7 +5,7 @@ services:
       database:
         condition: service_healthy
     environment:
-      - PG_URI=postgres://postgres:secret@database/postgres
+      - PG_URI=${PG_URI}
     ports:
       - "3000:3000"
     healthcheck:
@@ -14,7 +14,7 @@ services:
   database:
     image: postgres
     environment:
-      - POSTGRES_PASSWORD=secret
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     healthcheck: 
       interval: 5s
       test: 'pg_isready --username=postgres'
