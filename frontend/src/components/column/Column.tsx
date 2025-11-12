@@ -4,7 +4,7 @@ import { Box, Button, IconButton, Modal, Stack, TextField, Typography } from "@m
 import { lazy } from "react";
 const Task = lazy(() => import('../task/Task'))
 import axios from "axios";
-import { Add } from "@mui/icons-material";
+import { Add, Remove } from "@mui/icons-material";
 
 const modalStyle = {
   position: 'absolute',
@@ -18,7 +18,7 @@ const modalStyle = {
   p: 4,
 };
 
-function Column({column }: {column: {id: number, board_id: number, title: string}}) {
+function Column({column, deleteColumn }: {column: {id: number, board_id: number, title: string},deleteColumn:(id:number)=>Promise<void>}) {
   console.log(column)
 
   const [tasks, setTasks ] = useState<Record<string, unknown>[]>([])
@@ -144,12 +144,17 @@ function Column({column }: {column: {id: number, board_id: number, title: string
   
   const taskUtils = {move: moveTask, edit: startEditing, delete: deleteTask}
 
+  
+
   return (
     <>
       <Stack spacing={1} minWidth={"20ch"}>
+        <Stack>
         <Typography variant="h4" gutterBottom>
           {column.title}
         </Typography>
+        <IconButton onClick={()=>{deleteColumn(column.id)}}><Remove></Remove></IconButton>
+      </Stack>
         {tasks.map((task) => <>
           <Task task={task as {id: number, column_id: number, title: string, description: string}} taskUtils={taskUtils}></Task>
         </>)}
@@ -160,7 +165,7 @@ function Column({column }: {column: {id: number, board_id: number, title: string
         onClose={closeTaskModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-      >
+        >
         <Box sx={modalStyle}>
           <Stack spacing={2}>
             <Typography id="modal-modal-title" variant="h6" component="h2">

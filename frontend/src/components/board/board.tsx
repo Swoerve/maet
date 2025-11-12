@@ -90,11 +90,24 @@ function Board() {
     closeColumnModal()
   }
 
+  async function deleteColumn(id: number) {
+    const response = await axios.delete(`/api/column/${id}`);
+    console.log(response);
+    if(response.status == 200){
+      const index = columns.findIndex((column) => column.id === id)
+      if( index > -1 ) {
+        const newColumns = columns
+        newColumns.splice(index, 1)
+        setColumns(newColumns)
+      }
+    }
+  }
+
   return (
     <>
       <Stack direction={'row'} spacing={4} divider={<Divider orientation="vertical" flexItem />}>
         {columns.map((column) => <>
-          <Column column={column as {id: number, board_id: number, title: string}}></Column>
+          <Column column={column as {id: number, board_id: number, title: string}} deleteColumn={deleteColumn}></Column>
         </>)}
         <Stack>
           <IconButton onClick={openColumnModal}><Add></Add></IconButton>
