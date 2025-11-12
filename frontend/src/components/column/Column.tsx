@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
 import { Box, Button, IconButton, Modal, Stack, TextField, Typography } from "@mui/material";
 import Task from "../task/Task";
 import axios from "axios";
@@ -19,67 +18,141 @@ const modalStyle = {
 };
 
 function Column({column }: {column: {id: number, board_id: number, title: string}}) {
-  const params = useParams()
-  console.log(params)
+  console.log(column)
 
   const [tasks, setTasks ] = useState<Record<string, unknown>[]>([])
   // new Task states
   const [modalTaskOpen, setModalTaskOpen] = useState<boolean>(false);
   const openTaskModal = () => setModalTaskOpen(true);
-  const closeTaskModal = () => setModalTaskOpen(false);
+  const closeTaskModal = () => {
+    setModalTaskOpen(false)
+    setNewTaskTitle("")
+    setNewTaskDescription("")
+    setIsEditing(false)
+    setTaskToBeEdited(null)
+  };
   const [newTaskTitle, setNewTaskTitle] = useState<string>("");
   const [newTaskDescription, setNewTaskDescription] = useState<string>("");
 
+  const [isEditing, setIsEditing] = useState(false)
+  const [taskToBeEdited, setTaskToBeEdited] = useState<any>()
+
   useEffect(() => {
     async function getTasks(){
+      console.log("getting tasks")
       const response = await axios.get(`/api/task/column/${column.id}`)
       const data = await response.data
+      console.log(data)
+      
       const newTasks: any[] = []
-      await Promise.all(data.map((d: any) => {
-        newTasks.push(d)
+      await Promise.all(data.map( async (d: any) => {
+        const taskResponse = await axios.get(`/api/task/${d}`)
+        const taskData = taskResponse.data
+        newTasks.push(taskData)
       }))
       setTasks(newTasks)
     }
 
     getTasks()
-  })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
     // calls the backend with a new column to save/create it
   async function createNewTask() {
-    const response = await axios.post(`/api/column`, {
+    const response = await axios.post(`/api/task`, {
       column_id: column.id,
-      title: newTaskTitle
+      title: newTaskTitle,
+      description: newTaskDescription
     });
     console.log(response);
     if(response.status == 200){
       const data = await response.data
-      setTasks([...tasks, {id: data.id, board_id: data.board_id, title: data.title}])
+      setTasks([...tasks, {id: data.id, column_id: data.column_id, title: data.title, description: data.description}])
     }
+    closeTaskModal()
+  }
+
+  async function startEditing(newTask: any) {
+    setIsEditing(true)
+    setTaskToBeEdited(newTask)
+    setNewTaskTitle(newTask.title)
+    setNewTaskDescription(newTask.description)
+    openTaskModal()
   }
 
   async function editTask() {
-
+    console.log('editing')
+    console.log(taskToBeEdited)
+    if(taskToBeEdited === undefined || taskToBeEdited === null){
+      return
+    }
+    const response = await axios.patch(`/api/task/${taskToBeEdited.id}`, {
+      column_id: taskToBeEdited.column_id,
+      title: newTaskTitle,
+      description: newTaskDescription
+    });
+    console.log(response);
+    if(response.status == 200){
+      const index = tasks.findIndex((task) => task.id === taskToBeEdited.id)
+      const newTasks = tasks
+      newTasks[index] = {id: taskToBeEdited.id, column_id: taskToBeEdited.column_id, title: newTaskTitle, description: newTaskDescription}
+      setTasks(newTasks)
+    }
+    setIsEditing(false)
+    setTaskToBeEdited(null)
+    setNewTaskTitle("")
+    setNewTaskDescription("")
+    closeTaskModal()
   }
 
-  async function deleteTask() {
-
+  async function deleteTask(taskToDelete: any) {
+    const response = await axios.delete(`/api/task/${taskToDelete.id}`);
+    console.log(response);
+    if(response.status == 200){
+      const index = tasks.findIndex((task) => task.id === taskToDelete.id)
+      if( index > -1 ) {
+        const newTasks = tasks
+        newTasks.splice(index, 1)
+        setTasks(newTasks)
+      }
+    }
+    closeTaskModal()
   }
 
-  async function moveTask() {
-
+  async function moveTask(taskToMove: any) {
+    console.log('editing')
+    console.log(taskToMove)
+    const response = await axios.patch(`/api/task/${taskToMove.id}`, {
+      column_id: taskToMove.column_id, // switch to actual column to move to
+      title: taskToMove.title,
+      description: taskToMove.description
+    });
+    console.log(response);
+    if(response.status == 200){
+      const index = tasks.findIndex((task) => task.id === taskToBeEdited.id)
+      const newTasks = tasks
+      newTasks[index] = {id: taskToBeEdited.id, column_id: taskToBeEdited.column_id, title: newTaskTitle, description: newTaskDescription}
+      setTasks(newTasks)
+    }
+    setIsEditing(false)
+    setTaskToBeEdited(null)
+    setNewTaskTitle("")
+    setNewTaskDescription("")
+    closeTaskModal()
   }
   
-  const taskUtils = {move: moveTask, edit: editTask, delete: deleteTask}
+  const taskUtils = {move: moveTask, edit: startEditing, delete: deleteTask}
 
   return (
     <>
       <Stack spacing={1} minWidth={"20ch"}>
-        <p>Hello</p>
-        <p>{column.title}</p>
-        <IconButton onClick={openTaskModal} size="large"><Add></Add></IconButton>
+        <Typography variant="h4" gutterBottom>
+          {column.title}
+        </Typography>
         {tasks.map((task) => <>
           <Task task={task as {id: number, column_id: number, title: string, description: string}} taskUtils={taskUtils}></Task>
         </>)}
+        <IconButton onClick={openTaskModal} size="large"><Add></Add></IconButton>
       </Stack>
       <Modal
         open={modalTaskOpen}
@@ -90,7 +163,10 @@ function Column({column }: {column: {id: number, board_id: number, title: string
         <Box sx={modalStyle}>
           <Stack spacing={2}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Create new Column
+              {isEditing 
+            ? "Edit Task"
+            : "Create new Task"
+            }
             </Typography>
             <TextField
               id="new-task-title"
@@ -112,7 +188,10 @@ function Column({column }: {column: {id: number, board_id: number, title: string
               multiline
               minRows={3}
               />
-            <Button variant="outlined" onClick={createNewTask}>Create</Button>
+            {isEditing 
+            ? <Button variant="outlined" onClick={editTask}>Edit</Button>
+            : <Button variant="outlined" onClick={createNewTask}>Create</Button>
+            }
           </Stack>
         </Box>
       </Modal>

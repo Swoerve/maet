@@ -1,12 +1,13 @@
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, Menu, MenuItem } from "@mui/material";
+import { Card, CardContent, Menu, MenuItem, Typography } from "@mui/material";
 
 
 function Task({task, taskUtils}: {
   task: {id: number, column_id: number, title: string, description: string},
-  taskUtils: {move: () => Promise<void>, edit: () => Promise<void>, delete: () => Promise<void>}}
+  taskUtils: {move: (task: unknown) => Promise<void>, edit: (newTask: unknown) => Promise<void>, delete: (task: unknown) => Promise<void>}}
 ) {
+  console.log(task)
 
   const [contextMenu, setContextMenu] = useState<{
   mouseX: number;
@@ -35,9 +36,15 @@ function Task({task, taskUtils}: {
 
   return (
     <>
-      <Card onContextMenu={handleContextMenu}>
-        <CardHeader>{task.title}</CardHeader>
-        <CardContent>{task.description}</CardContent>
+      <Card onContextMenu={handleContextMenu} >
+        <CardContent>
+          <Typography variant="h5" gutterBottom>
+            {task.title}
+          </Typography>
+          <Typography variant="body2">
+            {task.description}
+          </Typography>
+        </CardContent>
       </Card>
       <Menu
         open={contextMenu !== null}
@@ -49,9 +56,9 @@ function Task({task, taskUtils}: {
           : undefined
         }
         >
-          <MenuItem onClick={taskUtils.move}>Move</MenuItem>
-          <MenuItem onClick={taskUtils.edit}>Edit</MenuItem>
-          <MenuItem onClick={taskUtils.delete}>Delete</MenuItem>
+          {/* <MenuItem onClick={taskUtils.move}>Move</MenuItem> */}
+          <MenuItem onClick={() => {taskUtils.edit(task)}}>Edit</MenuItem>
+          <MenuItem onClick={() => {taskUtils.delete(task)}}>Delete</MenuItem>
       </Menu>
     </>
   );

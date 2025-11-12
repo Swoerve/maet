@@ -72,6 +72,7 @@ export default function LoginPage() {
                   required
                   id="outlined-required"
                   label="email"
+                  value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   />
               </Grid>
@@ -82,6 +83,7 @@ export default function LoginPage() {
                   label="Password"
                   type="password"
                   autoComplete="current-password"
+                  value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   />
               </Grid>
@@ -110,6 +112,7 @@ export default function LoginPage() {
                 required
                 id="outlined-required"
                 label="username"
+                value={username}
                 onChange={(event) => setUsername(event.target.value)}
                 />
             </Grid>
@@ -118,6 +121,7 @@ export default function LoginPage() {
                 required
                 id="outlined-required"
                 label="email"
+                value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 />
             </Grid>
@@ -128,6 +132,7 @@ export default function LoginPage() {
                 label="Password"
                 type="password"
                 autoComplete="current-password"
+                value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 />
             </Grid>

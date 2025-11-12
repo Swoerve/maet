@@ -34,7 +34,10 @@ function Main() {
   // new Board states
   const [newModalOpen, setNewModalOpen] = useState<boolean>(false);
   const handleOpen = () => setNewModalOpen(true);
-  const handleClose = () => setNewModalOpen(false);
+  const handleClose = () => {
+    setNewModalOpen(false)
+    setNewBoardTitle("")
+  };
   const [newBoardTitle, setNewBoardTitle] = useState<string>("");
 
   const navigate = useNavigate()
@@ -91,6 +94,7 @@ function Main() {
       const data = await response.data
       setBoards([...boards, {id: data.id, owner_id: data.owner_id, title: data.title}])
     }
+    handleClose()
   }
 
   return (

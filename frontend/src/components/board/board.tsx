@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 //import "./Main.css";
-import {Button, Typography, Modal, Box, TextField, IconButton} from "@mui/material";
+import {Button, Typography, Modal, Box, TextField, IconButton, Divider} from "@mui/material";
 import axios from "axios";
 import { useParams } from "react-router";
 import { Stack } from "@mui/material";
@@ -31,7 +31,10 @@ function Board() {
   // new Board states
   const [modalColumnOpen, setModalColumnOpen] = useState<boolean>(false);
   const openColumnModal = () => setModalColumnOpen(true);
-  const closeColumnModal = () => setModalColumnOpen(false);
+  const closeColumnModal = () => {
+    setModalColumnOpen(false)
+    setNewColumnTitle("")
+  };
   const [newColumnTitle, setNewColumnTitle] = useState<string>("");
 
   useEffect(() => {
@@ -46,8 +49,6 @@ function Board() {
         console.log(board)
         const boardColumnsResponse = await axios.get(`/api/column/board/${params.board_id}`);
         const boardColumnsData = await boardColumnsResponse.data;
-        console.log('board has been set')
-        console.log(board)
         // with the ids then proceed to get the board information
         const newColumns: any = []
         await Promise.all(boardColumnsData.map(async (d: any)=>{
@@ -86,11 +87,12 @@ function Board() {
       setColumns([...columns, {id: data.id, board_id: data.board_id, title: data.title}])
       console.log(columns)
     }
+    closeColumnModal()
   }
 
   return (
     <>
-      <Stack direction={'row'} spacing={4}>
+      <Stack direction={'row'} spacing={4} divider={<Divider orientation="vertical" flexItem />}>
         {columns.map((column) => <>
           <Column column={column as {id: number, board_id: number, title: string}}></Column>
         </>)}
