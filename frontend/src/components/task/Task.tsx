@@ -57,8 +57,8 @@ function Task({task, taskUtils}: {
         }
         >
           {/* <MenuItem onClick={taskUtils.move}>Move</MenuItem> */}
-          <MenuItem onClick={() => {taskUtils.edit(task)}}>Edit</MenuItem>
-          <MenuItem onClick={() => {taskUtils.delete(task)}}>Delete</MenuItem>
+          <MenuItem onClick={() => {taskUtils.edit(task); handleClose()}}>Edit</MenuItem>
+          <MenuItem onClick={() => {taskUtils.delete(task); handleClose()}}>Delete</MenuItem>
       </Menu>
     </>
   );

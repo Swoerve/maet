@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { Box, Button, IconButton, Modal, Stack, TextField, Typography } from "@mui/material";
-import { lazy } from "react";
-const Task = lazy(() => import('../task/Task'))
+//import { lazy } from "react";
+//const Task = lazy(() => import('../task/Task'))
+import Task from '../task/Task'
 import axios from "axios";
 import { Add, Remove } from "@mui/icons-material";
 
@@ -114,7 +115,7 @@ function Column({column, deleteColumn }: {column: {id: number, board_id: number,
       if( index > -1 ) {
         const newTasks = tasks
         newTasks.splice(index, 1)
-        setTasks(newTasks)
+        setTasks([...newTasks])
       }
     }
     closeTaskModal()

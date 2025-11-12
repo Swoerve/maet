@@ -63,6 +63,10 @@ export async function deleteColume(req: Request, res: Response) {
     res.status(401).send('no colume id provided')
     return
   }
-  await deleteBoardColume(Number(colume_id))
-  res.status(200).send();
+  const serviceResult = await deleteBoardColume(Number(colume_id))
+  if(serviceResult){
+    res.status(200).send();
+  } else {
+    res.status(500).send();
+  }
 }
