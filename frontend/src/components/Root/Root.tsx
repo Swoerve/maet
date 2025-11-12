@@ -15,6 +15,7 @@ function Root() {
       height="90vh"
       width="100dvw"
       overflow="scroll"
+      justifyContent="space-between"
     >
         <Outlet></Outlet>
       </Box>

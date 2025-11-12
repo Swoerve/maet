@@ -95,3 +95,15 @@ export async function createUserBoardConnection(user_id: number, board_id: numbe
     console.log(error)
   })
 }
+
+export async function deleteBoardById(id: number){
+  return await db.none(`DELETE FROM boards WHERE id = $1`, [id])
+  .then(()=>{
+    console.log(`deleted board with id ${id}`)
+    return true
+  })
+  .catch((error)=>{
+    console.log(error)
+    return false
+  })
+}
