@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 //import "./Main.css";
 import {Button, Typography, Modal, Box, TextField, IconButton, Divider} from "@mui/material";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router";
+import { useParams } from "react-router";
 import { Stack } from "@mui/material";
-//import { lazy } from "react";
-//const Column = lazy(() => import('../column/Column'))
-import Column from "../column/Column";
-import { Add, Remove } from "@mui/icons-material";
+import { lazy } from "react";
+const Column = lazy(() => import('../column/Column'))
+//import Column from "../column/Column";
+import { Add } from "@mui/icons-material";
 const modalStyle = {
   position: 'absolute',
   top: '50%',
@@ -23,8 +23,7 @@ const modalStyle = {
 
 function Board() {
   const params = useParams()
-  // console.log(params)
-  const navigate = useNavigate()
+
   // state holding board info for the user
   const [board, setBoard] = useState<Record<string, unknown>>({});
 
@@ -47,8 +46,8 @@ function Board() {
         const response = await axios.get(`/api/board/${params.board_id}`);
         const data = await response.data;
         setBoard(data)
-        console.log('board has been set')
-        console.log(board)
+        //console.log('board has been set')
+        //console.log(board)
         const boardColumnsResponse = await axios.get(`/api/column/board/${params.board_id}`);
         const boardColumnsData = await boardColumnsResponse.data;
         // with the ids then proceed to get the board information
@@ -61,7 +60,7 @@ function Board() {
 
         setColumns(newColumns)
         console.log('columns have been set')
-        console.log(columns)
+        //console.log(columns)
       } catch (error) {
         console.log(error);
       }
@@ -83,35 +82,27 @@ function Board() {
       board_id: Number(board.id),
       title: newColumnTitle
     });
-    console.log(response);
+    //console.log(response);
     if(response.status == 200){
       const data = await response.data
       setColumns([...columns, {id: data.id, board_id: data.board_id, title: data.title}])
-      console.log(columns)
+      //console.log(columns)
     }
     closeColumnModal()
   }
 
-
-  async function deleteBoard(){
-    const response = await axios.delete(`/api/board/${board.id}`);
-    console.log(response);
-    if(response.status == 200){
-      navigate('/main')
-    }}
-
   async function deleteColumn(id: number) {
     const response = await axios.delete(`/api/column/${id}`);
-    console.log(response);
+    //console.log(response);
     if(response.status == 200){
-      console.log("delete response positive")
       const index = columns.findIndex((column) => column.id === id)
-      console.log(index)
+      //console.log(index)
       if( index > -1 ) {
+        console.log("deleting column")
         const newColumns = columns
-        console.log(newColumns)
+        //console.log(newColumns)
         newColumns.splice(index, 1)
-        console.log(newColumns)
+        //console.log(newColumns)
         setColumns([...newColumns])
       }
     }
@@ -152,8 +143,6 @@ function Board() {
           </Stack>
         </Box>
       </Modal>
-      <IconButton size="large" color="error" sx={{alignSelf: "end", justifySelf: "flex-end", float: "right"}}
-	onClick={deleteBoard}><Remove></Remove></IconButton>
     </>
   );
 }

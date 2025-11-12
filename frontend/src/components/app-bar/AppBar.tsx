@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import {
   AppBar,
   IconButton,
@@ -14,8 +14,8 @@ import { AccountCircle, Home, PersonAdd, Settings } from "@mui/icons-material";
 import Profile from "../profile/Profile";
 import { useNavigate, useParams } from "react-router";
 import axios from "axios";
-import BoardSettings from "./BoardSettings";
-import BoardInvite from "./BoardInvite";
+const BoardSettings = lazy(() => import('./BoardSettings'))
+const BoardInvite = lazy(() => import('./BoardInvite'))
 
 function Appbar() {
   const navigate = useNavigate();
@@ -61,17 +61,14 @@ function Appbar() {
       navigate("/");
       return;
     }
-
-    console.log("useEffect");
-    console.log(params);
     async function getCurrBoardInfo() {
-      console.log("appbar: getting board info");
+      //console.log("appbar: getting board info");
       try {
         // get the ids of all the boards teh user is part of
         const response = await axios.get(`/api/board/${params.board_id}`);
         const data = await response.data;
         setBoard(data);
-        console.log("board has been set inside app bar");
+        //console.log("board has been set inside app bar");
       } catch (error) {
         console.log("appbar: board: error");
         console.log(error);
@@ -94,7 +91,7 @@ function Appbar() {
 
   async function deleteBoard() {
     const response = await axios.delete(`/api/board/${board.id}`);
-    console.log(response);
+    //console.log(response);
     if (response.status == 200) {
       navigate("/main");
       setBoard(null)

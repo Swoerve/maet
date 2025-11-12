@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { Box, Button, IconButton, Modal, Stack, TextField, Typography } from "@mui/material";
-//import { lazy } from "react";
-//const Task = lazy(() => import('../task/Task'))
-import Task from '../task/Task'
+import { lazy } from "react";
+const Task = lazy(() => import('../task/Task'))
+//import Task from '../task/Task'
 import axios from "axios";
 import { Add, Remove } from "@mui/icons-material";
 
@@ -20,7 +20,7 @@ const modalStyle = {
 };
 
 function Column({column, deleteColumn }: {column: {id: number, board_id: number, title: string},deleteColumn:(id:number)=>Promise<void>}) {
-  console.log(column)
+  //console.log(column)
 
   const [tasks, setTasks ] = useState<Record<string, unknown>[]>([])
   // new Task states
@@ -44,7 +44,7 @@ function Column({column, deleteColumn }: {column: {id: number, board_id: number,
       console.log("getting tasks")
       const response = await axios.get(`/api/task/column/${column.id}`)
       const data = await response.data
-      console.log(data)
+      //console.log(data)
       
       const newTasks: any[] = []
       await Promise.all(data.map( async (d: any) => {
@@ -66,7 +66,7 @@ function Column({column, deleteColumn }: {column: {id: number, board_id: number,
       title: newTaskTitle,
       description: newTaskDescription
     });
-    console.log(response);
+    //console.log(response);
     if(response.status == 200){
       const data = await response.data
       setTasks([...tasks, {id: data.id, column_id: data.column_id, title: data.title, description: data.description}])
@@ -83,8 +83,7 @@ function Column({column, deleteColumn }: {column: {id: number, board_id: number,
   }
 
   async function editTask() {
-    console.log('editing')
-    console.log(taskToBeEdited)
+    //console.log(taskToBeEdited)
     if(taskToBeEdited === undefined || taskToBeEdited === null){
       return
     }
@@ -93,8 +92,9 @@ function Column({column, deleteColumn }: {column: {id: number, board_id: number,
       title: newTaskTitle,
       description: newTaskDescription
     });
-    console.log(response);
+    //console.log(response);
     if(response.status == 200){
+      console.log('editing task')
       const index = tasks.findIndex((task) => task.id === taskToBeEdited.id)
       const newTasks = tasks
       newTasks[index] = {id: taskToBeEdited.id, column_id: taskToBeEdited.column_id, title: newTaskTitle, description: newTaskDescription}
@@ -109,10 +109,11 @@ function Column({column, deleteColumn }: {column: {id: number, board_id: number,
 
   async function deleteTask(taskToDelete: any) {
     const response = await axios.delete(`/api/task/${taskToDelete.id}`);
-    console.log(response);
+    //console.log(response);
     if(response.status == 200){
       const index = tasks.findIndex((task) => task.id === taskToDelete.id)
       if( index > -1 ) {
+        console.log("deleting task")
         const newTasks = tasks
         newTasks.splice(index, 1)
         setTasks([...newTasks])
@@ -122,15 +123,16 @@ function Column({column, deleteColumn }: {column: {id: number, board_id: number,
   }
 
   async function moveTask(taskToMove: any) {
-    console.log('editing')
-    console.log(taskToMove)
+    //console.log('editing')
+    //console.log(taskToMove)
     const response = await axios.patch(`/api/task/${taskToMove.id}`, {
       column_id: taskToMove.column_id, // switch to actual column to move to
       title: taskToMove.title,
       description: taskToMove.description
     });
-    console.log(response);
+    //console.log(response);
     if(response.status == 200){
+      console.log("moving task")
       const index = tasks.findIndex((task) => task.id === taskToBeEdited.id)
       const newTasks = tasks
       newTasks[index] = {id: taskToBeEdited.id, column_id: taskToBeEdited.column_id, title: newTaskTitle, description: newTaskDescription}

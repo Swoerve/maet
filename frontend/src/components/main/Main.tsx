@@ -48,12 +48,6 @@ function Main() {
 
   useEffect(() => {
 
-    if(user === null){
-      console.log('user not Logged in')
-      // kick user back to login page
-      navigate('/login')
-    }
-
     async function getUserBoards() {
       try {
         // get the ids of all the boards teh user is part of
@@ -69,7 +63,7 @@ function Main() {
         }))
 
         setBoards(newData)
-        console.log('boards have been set')
+        //console.log('boards have been set')
       } catch (error) {
         console.log(error);
       }
@@ -89,7 +83,7 @@ function Main() {
       owner_id: user,
       title: newBoardTitle
     });
-    console.log(response);
+    //console.log(response);
     if(response.status == 200){
       const data = await response.data
       setBoards([...boards, {id: data.id, owner_id: data.owner_id, title: data.title}])
