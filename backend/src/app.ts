@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import userRoutes from './routes/user.js';
 import boardRoutes from './routes/board.js';
+import columnRoutes from './routes/column.js'
 
 const app = express();
 
@@ -17,5 +18,6 @@ app.get('/', (req, res) => {
 // routes
 app.use('/user', userRoutes);
 app.use('/board', boardRoutes);
+app.use('/column', columnRoutes);
 
 export default app;

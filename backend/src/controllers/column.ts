@@ -1,11 +1,16 @@
-import {createColume, editColumeTitle ,getColumeById, getColumeByBoard, deleteBoardColume} from '../services/colume.js'
+import {createColume, editColumeTitle ,getColumeById, getColumeByBoard, deleteBoardColume} from '../services/column.js'
 import type { Request, Response } from 'express';
 
 export async function postColume(req: Request, res: Response){
+  console.log(req.body)
   const board_id: number = req.body.board_id
   const title: string = req.body.title
-  await createColume(board_id, title)
-  res.status(200).send();
+  const response = await createColume(board_id, title)
+  if(response){
+    res.status(200).send()
+  } else {
+    res.status(500).send()
+  }
 }
 
 export async function patchColume(req: Request, res: Response){

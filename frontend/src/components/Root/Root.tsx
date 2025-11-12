@@ -8,7 +8,14 @@ function Root() {
     <>
       <Appbar></Appbar>
 
-      <Box component="main" sx={{ p: 2, paddingTop: 4 }}>
+      <Box 
+      component="main" 
+      sx={{ p: 2, paddingTop: 4 }}
+      display="flex"
+      height="90vh"
+      width="100dvw"
+      overflow="scroll"
+    >
         <Outlet></Outlet>
       </Box>
     </>
