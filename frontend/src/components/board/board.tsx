@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 //import "./Main.css";
 import {Button, Typography, Modal, Box, TextField, IconButton, Divider} from "@mui/material";
 import axios from "axios";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { Stack } from "@mui/material";
 import { lazy } from "react";
 const Column = lazy(() => import('../column/Column'))
-import { Add } from "@mui/icons-material";
+import { Add, Remove } from "@mui/icons-material";
 const modalStyle = {
   position: 'absolute',
   top: '50%',
@@ -23,6 +23,7 @@ const modalStyle = {
 function Board() {
   const params = useParams()
   // console.log(params)
+  const navigate = useNavigate()
   // state holding board info for the user
   const [board, setBoard] = useState<Record<string, unknown>>({});
 
@@ -90,6 +91,13 @@ function Board() {
     closeColumnModal()
   }
 
+  async function deleteBoard(){
+    const response = await axios.delete(`/api/board/${board.id}`);
+    console.log(response);
+    if(response.status == 200){
+      navigate('/main')
+    }}
+
   return (
     <>
       <Stack direction={'row'} spacing={4} divider={<Divider orientation="vertical" flexItem />}>
@@ -124,6 +132,8 @@ function Board() {
           </Stack>
         </Box>
       </Modal>
+      <IconButton size="large" color="error" sx={{alignSelf: "end", justifySelf: "flex-end", float: "right"}}
+	onClick={deleteBoard}><Remove></Remove></IconButton>
     </>
   );
 }

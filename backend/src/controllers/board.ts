@@ -1,4 +1,4 @@
-import { createBoard, createUserBoardConnection, editBoardTitle, fetchHelloBoard, getBoardById, getBoardByUser } from '../services/board.js';
+import { createBoard, createUserBoardConnection, editBoardTitle, fetchHelloBoard, getBoardById, getBoardByUser, deleteBoardById } from '../services/board.js';
 import type { Request, Response } from 'express';
 
 export async function helloBoard(req: Request, res: Response) {
@@ -78,6 +78,18 @@ export async function postUserBoardConnection(req: Request, res: Response){
     res.status(200).send(`added a user to a board`);
   } else {
     res.status(500).send('something went wrong')
+  }
+}
+
+export async function deleteBoard(req: Request, res: Response){
+  const id = Number(req.params.id)
+
+  const serviceResult = await deleteBoardById(id)
+
+  if( serviceResult ){
+    res.status(200).send()
+  } else {
+    res.status(500).send()
   }
 }
 
