@@ -14,7 +14,7 @@ export async function createTask(colume_id:number, title:string, description:str
 }
 
 export async function editTask(id:number, colume_id:number, title:string, description:string) {
-  db.one(`UPDATE task SET colume_id = $2, title = $3, description = $4 WHERE id $1`,[id, colume_id, title, description])
+  db.one(`UPDATE tasks SET colume_id = $2, title = $3, description = $4 WHERE id $1`,[id, colume_id, title, description])
     .then((data) => {
     console.log(data)
     return true
@@ -26,7 +26,7 @@ export async function editTask(id:number, colume_id:number, title:string, descri
 }
 
 export async function getTaskById(id:number): Promise<any>{
-  const response = await db.one(`SELECT * FROM task WHERE id $1`,[id])
+  const response = await db.one(`SELECT * FROM tasks WHERE id $1`,[id])
   .then((data) => {
     console.log(data)
     return{
@@ -50,7 +50,7 @@ export async function getTaskById(id:number): Promise<any>{
 }
 
 export async function getTaskByColume(id:number): Promise<any>{
-  const response = await db.many(`SELECT * FROM taskcolums WHERE taskcolums.colume_id = $1`,[id])
+  const response = await db.many(`SELECT * FROM tasks WHERE column_id = $1`,[id])
   .then((data) => {
     const result: {result: unknown, data: unknown[]} = {
       result: true,
@@ -74,6 +74,6 @@ export async function getTaskByColume(id:number): Promise<any>{
 }
 
 export async function deleteColumeTask(id:number) {
-  db.one(`DELETE FROM task WHERE id = $1`, [id])
+  db.one(`DELETE FROM tasks WHERE id = $1`, [id])
   return true
 }
