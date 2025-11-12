@@ -2,7 +2,7 @@
 import db from '../models/postgres.js'
 
 export async function createColume(board_id:number, title:string) {
-  db.one(`INSERT INTO colume(board_id, title) VALUES($1, $2)`, [board_id, title])
+  db.one(`INSERT INTO columes(board_id, title) VALUES($1, $2)`, [board_id, title])
   .then((data) =>{
     console.log(data)
     return true
@@ -14,7 +14,7 @@ export async function createColume(board_id:number, title:string) {
 }
 
 export async function editColumeTitle(id:number, title:string) {
-  db.one(`UPDATE colume SET title = $2 WHERE id $1`, [id, title]) 
+  db.one(`UPDATE colume SET title = $2 WHERE id = $1`, [id, title]) 
   .then((data) => {
     console.log(data)
     return true
@@ -73,6 +73,6 @@ export async function getColumeByBoard(id: number): Promise<any> {
 }
 
 export async function deleteBoardColume(id: number) {
-  db.one(`DELETE FROM colume WHERE $1`,[id])
+  db.one(`DELETE FROM colume WHERE id = $1`,[id])
   return true
 }
