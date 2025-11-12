@@ -6,19 +6,28 @@ export async function fetchHelloBoard() {
 }
 
 export async function createBoard(owner_id: number, title: string){
-  db.one(`INSERT INTO boards(owner_id, title) VALUES($1, $2)`, [owner_id, title])
+  const response = await db.one(`INSERT INTO boards(owner_id, title) VALUES($1, $2) RETURNING id, owner_id, title`, [owner_id, title])
   .then((data) => {
     console.log(data)
-    return true
+    return data
   })
   .catch((error) => {
     console.log(error)
+    return false
   })
-  return false
+
+  if(response == false){
+    return false
+  }
+  const response2 = await createUserBoardConnection(response.owner_id, response.id, true)
+  if(response2 === false) {
+    return false
+  }
+  return {id: response.id, title: response.title}
 }
 
 export async function editBoardTitle(id: number, title: string){
-  db.one(`UPDATE boards SET title = $2 WHERE id = $1`, [id, title])
+  return await db.one(`UPDATE boards SET title = $2 WHERE id = $1`, [id, title])
   .then((data) => {
     console.log(data)
     return true
@@ -26,7 +35,6 @@ export async function editBoardTitle(id: number, title: string){
   .catch((error) => {
     console.log(error)
   })
-  return false
 }
 
 export async function getBoardById(id: number): Promise<any>{
@@ -78,7 +86,7 @@ export async function getBoardByUser(id: number): Promise<any> {
 }
 
 export async function createUserBoardConnection(user_id: number, board_id: number, is_owner: boolean){
-  await db.one(`INSERT INTO boardusers(user_id, board_id, is_owner) VALUES($1, $2, $3)`, [user_id, board_id, is_owner])
+  return await db.one(`INSERT INTO boardusers(user_id, board_id, is_owner) VALUES($1, $2, $3)`, [user_id, board_id, is_owner])
   .then((data) => {
     console.log(data)
     return true
@@ -86,5 +94,4 @@ export async function createUserBoardConnection(user_id: number, board_id: numbe
   .catch((error) => {
     console.log(error)
   })
-  return false
 }

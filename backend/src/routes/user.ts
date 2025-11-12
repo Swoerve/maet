@@ -1,5 +1,5 @@
 import express from 'express';
-import { createNewUser } from '../controllers/user.js';
+import { createNewUser, deleteUser, getUser, getVerify, patchUser } from '../controllers/user.js';
 
 const router = express.Router();
 
@@ -9,30 +9,18 @@ router.get('/', (req, res) => {
 });
 
 // create user
-
-router.post('/new', createNewUser);
+router.post('/', createNewUser);
 
 // edit user
-router.patch('/:id', (req, res) => {
-  res.send(`editing user ${req.params.id}`);
-});
+router.patch('/:id', patchUser);
 
 // check if password match?
-router.get('/verify', (req, res) => {
-  // look for user with matchin mail and password?
-  // check if password = the req.body.password
-  // respond with a true or false value?
-  res.send('new user');
-});
+router.post('/verify', getVerify);
 
 // get user, just to return user id to the client
-router.get('/:id', (req, res) => {
-  res.send(`getting user ${req.params.id}`);
-});
+router.get('/:id', getUser);
 
 // delete user
-router.delete('/:id', (req, res) => {
-  res.send(`deleting user ${req.params.id}`);
-});
+router.delete('/:id', deleteUser);
 
 export default router;

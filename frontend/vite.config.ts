@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
@@ -15,11 +16,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ''),
-        configure: (proxy, options) => {
+        configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {
             console.log('error', err);
           });
-          proxy.on('proxyReq', (proxyReq, req, _res) => {
+          proxy.on('proxyReq', (_proxyReq, req, _res) => {
             console.log('Request sent to target:', req.method, req.url);
           });
           proxy.on('proxyRes', (proxyRes, req, _res) => {
