@@ -72,6 +72,12 @@ export async function getColumeByBoard(id: number): Promise<any> {
 }
 
 export async function deleteBoardColume(id: number) {
-  db.one(`DELETE FROM columns WHERE = $1`,[id])
-  return true
+  return await db.none(`DELETE FROM columns WHERE id = $1`,[id])
+  .then(() => {
+    return true
+  })
+  .catch((error) => {
+    console.log(error)
+    return false
+  })
 }

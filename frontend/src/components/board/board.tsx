@@ -5,8 +5,9 @@ import {Button, Typography, Modal, Box, TextField, IconButton, Divider} from "@m
 import axios from "axios";
 import { useParams, useNavigate } from "react-router";
 import { Stack } from "@mui/material";
-import { lazy } from "react";
-const Column = lazy(() => import('../column/Column'))
+//import { lazy } from "react";
+//const Column = lazy(() => import('../column/Column'))
+import Column from "../column/Column";
 import { Add, Remove } from "@mui/icons-material";
 const modalStyle = {
   position: 'absolute',
@@ -103,11 +104,15 @@ function Board() {
     const response = await axios.delete(`/api/column/${id}`);
     console.log(response);
     if(response.status == 200){
+      console.log("delete response positive")
       const index = columns.findIndex((column) => column.id === id)
+      console.log(index)
       if( index > -1 ) {
         const newColumns = columns
+        console.log(newColumns)
         newColumns.splice(index, 1)
-        setColumns(newColumns)
+        console.log(newColumns)
+        setColumns([...newColumns])
       }
     }
   }

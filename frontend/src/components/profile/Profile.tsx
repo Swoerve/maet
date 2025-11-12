@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 //import { useNavigate } from 'react-router';
 import { Typography } from "@mui/material";
+import { useNavigate } from "react-router";
 
 const modalStyle = {
   position: "absolute",
@@ -20,7 +21,7 @@ const modalStyle = {
 };
 
 export default function LoginPage() {
-  //const navigate = useNavigate()
+  const navigate = useNavigate()
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -69,7 +70,7 @@ export default function LoginPage() {
       .then((data) => {
         if (data) {
           sessionStorage.removeItem("user");
-          //navigate('/main')
+          navigate('/')
         }
       });
   }
