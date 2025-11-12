@@ -15,7 +15,11 @@ if (!PG_URI) {
 
 const db = pgp(PG_URI);
 
-await db.any(`DROP TABLE IF EXISTS users CASCADE`); // remove on prod
+await db.any(`DROP TABLE IF EXISTS tasks`); // remove on prod
+await db.any(`DROP TABLE IF EXISTS columns`); // remove on prod
+await db.any(`DROP TABLE IF EXISTS boardusers`); // remove on prod
+await db.any(`DROP TABLE IF EXISTS boards`); // remove on prod
+await db.any(`DROP TABLE IF EXISTS users`); // remove on prod
 
 await db.any(`CREATE TABLE IF NOT EXISTS users(
     id SERIAL PRIMARY KEY,
@@ -25,38 +29,34 @@ await db.any(`CREATE TABLE IF NOT EXISTS users(
     )
 `);
 
-await db.any(`DROP TABLE IF EXISTS boards CASCADE`); // remove on prod
 
 await db.any(`CREATE TABLE IF NOT EXISTS boards(
     id SERIAL PRIMARY KEY,
-    owner_id INTEGER NOT NULL,
+    owner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     title VARCHAR NOT NULL
     )
 `);
 
-await db.any(`DROP TABLE IF EXISTS boardusers CASCADE`); // remove on prod
 
 await db.any(`CREATE TABLE IF NOT EXISTS boardusers(
-    board_id INTEGER NOT NULL,
-    user_id INTEGER NOT NULL,
+    board_id INTEGER NOT NULL REFERENCES boards(id) ON DELETE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     is_owner BOOL NOT NULL
     )
 `);
 
-await db.any(`DROP TABLE IF EXISTS columns CASCADE`); // remove on prod
 
 await db.any(`CREATE TABLE IF NOT EXISTS columns(
     id SERIAL PRIMARY KEY,
-    board_id INTEGER NOT NULL,
+    board_id INTEGER NOT NULL REFERENCES boards(id) ON DELETE CASCADE,
     title VARCHAR NOT NULL
     )
 `);
 
-await db.any(`DROP TABLE IF EXISTS tasks CASCADE`); // remove on prod
 
 await db.any(`CREATE TABLE IF NOT EXISTS tasks(
     id SERIAL PRIMARY KEY,
-    column_id INTEGER NOT NULL,
+    column_id INTEGER NOT NULL REFERENCES columns(id) ON DELETE CASCADE,
     title VARCHAR NOT NULL,
     description TEXT NOT NULL
     )

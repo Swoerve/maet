@@ -6,10 +6,10 @@ export async function postColume(req: Request, res: Response){
   const board_id: number = req.body.board_id
   const title: string = req.body.title
   const response = await createColume(board_id, title)
-  if(response){
-    res.status(200).send()
+  if(response.result){
+    res.status(200).json(response.data)
   } else {
-    res.status(500).send()
+    res.status(500).json(response.error)
   }
 }
 
