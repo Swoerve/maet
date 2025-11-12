@@ -9,7 +9,7 @@ router.patch('/:id', patchTask);
 
 router.get('/:id', getTask);
 
-router.get('/colume/id', getColumeTask);
+router.get('/column/:id', getColumeTask);
 
 router.delete('/:id', deleteTask);
 
