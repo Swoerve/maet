@@ -32,11 +32,11 @@ export default function LoginPage() {
     let loadedUserInfo = false;
 
     async function getUser() {
-      console.log("getting user info");
+      //console.log("getting user info");
       const response = await axios.get(`/api/user/${user}`);
       const data = await response.data;
-      console.log(response)
-      console.log(data)
+      //console.log(response)
+      //console.log(data)
       setUsername(data.username);
       setEmail(data.email);
     }
@@ -45,6 +45,7 @@ export default function LoginPage() {
       getUser();
       loadedUserInfo = true;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function editUser() {
@@ -57,6 +58,7 @@ export default function LoginPage() {
       .then((res) => res.data)
       .then((data) => {
         if (data) {
+          console.log("editing user")
           sessionStorage.setItem("user", data.id);
           //navigate('/main')
         }
@@ -69,6 +71,7 @@ export default function LoginPage() {
       .then((res) => res.data)
       .then((data) => {
         if (data) {
+          console.log("deleting user")
           sessionStorage.removeItem("user");
           navigate('/')
         }

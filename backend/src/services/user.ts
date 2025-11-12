@@ -60,6 +60,19 @@ export async function getUserById(id: number): Promise<any>  {
   return response
 }
 
+export async function getUserByEmail(email: string): Promise<any>  {
+
+  const response = await db.one(`SELECT * FROM users WHERE email = $1`, [email])
+  .then(data => {
+    return {result: true, data: {id: data.id, username: data.username, email: data.email}}
+  })
+  .catch(error => {
+    console.error(error)
+  return {result: false, error: error}
+  })
+  return response
+}
+
 export async function dropUser(id: number): Promise<any>  {
 
   const response = await db.none(`DELETE FROM users WHERE id = $1`, [id])

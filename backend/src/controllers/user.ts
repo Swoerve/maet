@@ -1,4 +1,4 @@
-import { dropUser, editExistingUser, fetchHelloUser, getUserById, postNewUser, verifyUser } from '../services/user.js';
+import { dropUser, editExistingUser, fetchHelloUser, getUserByEmail, getUserById, postNewUser, verifyUser } from '../services/user.js';
 import type { Request, Response } from 'express';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -54,6 +54,19 @@ export async function getUser(req: Request, res: Response) {
   const id = Number(req.params.id)
 
   const serviceResult = await getUserById(id)
+  console.log('-----')
+  console.log(serviceResult)
+  if(serviceResult.result){
+    res.status(200).json(serviceResult.data)
+  } else {
+    res.status(500).send(serviceResult.error.message)
+  }
+}
+
+export async function getEmail(req: Request, res: Response) {
+  const email = req.body.email
+
+  const serviceResult = await getUserByEmail(email)
   console.log('-----')
   console.log(serviceResult)
   if(serviceResult.result){

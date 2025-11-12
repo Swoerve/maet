@@ -7,7 +7,7 @@ function Task({task, taskUtils}: {
   task: {id: number, column_id: number, title: string, description: string},
   taskUtils: {move: (task: unknown) => Promise<void>, edit: (newTask: unknown) => Promise<void>, delete: (task: unknown) => Promise<void>}}
 ) {
-  console.log(task)
+  //console.log(task)
 
   const [contextMenu, setContextMenu] = useState<{
   mouseX: number;
