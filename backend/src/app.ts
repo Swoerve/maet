@@ -1,14 +1,25 @@
 //import express = require('express')
-import express from 'express'
-import cors from 'cors'
+import express from 'express';
+import cors from 'cors';
+import userRoutes from './routes/user.js';
+import boardRoutes from './routes/board.js';
+import columnRoutes from './routes/column.js'
+import taskRoutes from './routes/tasks.js'
 
-const app = express()
+const app = express();
 
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 
+// default route to test
 app.get('/', (req, res) => {
-    res.send('Hello World')
-})
+  res.send('Hello World');
+});
 
-export default app
+// routes
+app.use('/user', userRoutes);
+app.use('/board', boardRoutes);
+app.use('/column', columnRoutes);
+app.use('/task', taskRoutes);
+
+export default app;

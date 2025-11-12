@@ -1,8 +1,7 @@
-import app from "./app.ts"
+import app from './app.js';
 
-
-const port = process.env.API_PORT || 3000
+const port = process.env.API_PORT || 3000;
 
 app.listen(port, () => {
-    console.log(`Server listening on port: ${port}`)
-})
+  console.log(`Server listening on port: ${port}`);
+});
