@@ -10,6 +10,7 @@ import Login from './components/login/login-page.tsx'
 import Main from './components/main/Main.tsx'
 import Board from './components/board/board.tsx'
 import Root from './components/Root/Root.tsx'
+import Policy from './components/policy.tsx'
 
 const theme = createTheme({
   colorSchemes: {
@@ -19,6 +20,7 @@ const theme = createTheme({
 
 const router = createBrowserRouter([
   {index: true, element: <Welcome/>},
+  {path: 'privacy', Component: Policy},
   {path: 'login', element: <Login/>},
   {path: 'main', Component: Root, children: [
     {index: true, Component: Main},

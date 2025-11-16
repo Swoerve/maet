@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import {
   Checkbox,
   FormControl,
@@ -222,10 +222,11 @@ export default function LoginPage() {
                   <FormControlLabel
                     required
                     control={<Checkbox checked={gdpr} onChange={(event)=>{setGdpr(event.target.checked); setGdprError(!gdpr)}} />}
-                    label="You consent to us saving your personal data in conjunction to GDPR laws"
+                    label="You consent to us saving your personal data in conjunction to our privacy policy"
                     sx={{maxWidth: "40ch"}}
                   />
                   <FormHelperText error={!gdprError}>You must consent to sign up</FormHelperText>
+                  <NavLink to={'/privacy'}>Privacy Policy</NavLink>
                 </FormGroup>
               </FormControl>
               <Stack
